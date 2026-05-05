@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login · Pelada da Discórdia</title>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Exo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D0001C;--red2:#FF0022;--red-dark:#7A000F;
+  --gold:#E2B84A;--green:#0D2B18;
+  --white:#F0F4F0;--muted:#6B9E7A;--faint:#3A6B4A;
+  --border2:rgba(226,184,74,.32);
+  --font-d:'Russo One','Impact',sans-serif;
+  --font-b:'Exo 2','Arial',sans-serif;
+}
+html,body{height:100%}
+body{
+  background-color:var(--green);
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 52px,rgba(255,255,255,.022) 52px,rgba(255,255,255,.022) 54px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 88px,rgba(0,0,0,.04) 88px,rgba(0,0,0,.04) 89px);
+  color:var(--white);font-family:var(--font-b);
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem 1rem;
+}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(208,0,28,.22) 0%,transparent 70%);pointer-events:none;z-index:0}
+svg.campo{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:450px;opacity:.04;pointer-events:none;z-index:0}
+.box{position:relative;z-index:1;width:100%;max-width:410px;background:rgba(8,20,12,.92);border:1px solid var(--border2);border-top:3px solid var(--red);border-radius:14px;padding:2.4rem 2rem 2rem;overflow:hidden}
+.box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,184,74,.45),transparent)}
+.box::after{content:'';position:absolute;bottom:-40px;right:-40px;width:130px;height:130px;border-radius:50%;border:1px solid rgba(226,184,74,.06);pointer-events:none}
+.logo{text-align:center;margin-bottom:2rem}
+.logo-icon{width:70px;height:70px;border-radius:50%;background:rgba(208,0,28,.15);border:2px solid rgba(208,0,28,.38);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto .85rem}
+.logo-name{font-family:var(--font-d);font-size:1.5rem;letter-spacing:2px;line-height:1.1}
+.logo-name span{color:var(--red2)}
+.logo-tag{font-size:.58rem;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-top:.35rem;display:block}
+.lbl{display:block;font-size:.6rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:.36rem;margin-top:1rem}
+.inp{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(226,184,74,.22);color:var(--white);padding:.66rem .88rem;border-radius:8px;font-family:var(--font-b);font-size:.94rem;font-weight:500;transition:border-color .2s}
+.inp:focus{outline:none;border-color:var(--red)}
+.inp::placeholder{color:var(--faint)}
+.hint{font-size:.63rem;color:var(--faint);margin-top:.3rem;line-height:1.5}
+.btn-login{width:100%;margin-top:1.4rem;background:var(--red);border:none;color:var(--white);font-family:var(--font-d);font-size:1rem;letter-spacing:2px;cursor:pointer;padding:.76rem;border-radius:8px;transition:background .2s,transform .1s}
+.btn-login:hover{background:var(--red2)}.btn-login:active{transform:scale(.985)}.btn-login:disabled{background:var(--red-dark);cursor:not-allowed;opacity:.6}
+.l-err{background:rgba(208,0,28,.1);border:1px solid rgba(208,0,28,.3);color:#FF6680;font-size:.76rem;padding:.58rem .88rem;border-radius:7px;margin-top:.85rem;display:none;line-height:1.5}
+.l-note{text-align:center;margin-top:1.1rem;font-size:.65rem;color:var(--faint);line-height:1.65}
+.l-note strong{color:var(--muted)}
+.l-load{text-align:center;padding:.75rem;display:none}
+.l-load span{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);animation:bounce .8s infinite ease-in-out;margin:0 3px}
+.l-load span:nth-child(2){animation-delay:.15s}.l-load span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+.pass-wrap{position:relative}
+.pass-eye{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--faint);cursor:pointer;font-size:1rem;padding:0}
+</style>
+</head>
+<body>
+
+<svg class="campo" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+  <rect width="700" height="450" fill="none" stroke="white" stroke-width="3"/>
+  <line x1="350" y1="0" x2="350" y2="450" stroke="white" stroke-width="2"/>
+  <circle cx="350" cy="225" r="75" fill="none" stroke="white" stroke-width="2"/>
+  <circle cx="350" cy="225" r="4" fill="white"/>
+  <rect x="0" y="140" width="100" height="170" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="600" y="140" width="100" height="170" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="0" y="173" width="42" height="104" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="658" y="173" width="42" height="104" fill="none" stroke="white" stroke-width="2"/>
+</svg>
+
+<div class="box">
+  <div class="logo">
+    <div class="logo-icon">⚽</div>
+    <div class="logo-name">PELADA DA <span>DISCÓRDIA</span></div>
+    <span class="logo-tag">Toda Terça · 22h00 · João Pessoa</span>
+  </div>
+
+  <label class="lbl">Nome completo</label>
+  <input class="inp" id="inp-nome" type="text" placeholder="Ex: Matheus Costa" autocomplete="name" spellcheck="false">
+  <div class="hint">Mesmo nome cadastrado pelo organizador</div>
+
+  <label class="lbl">Senha</label>
+  <div class="pass-wrap">
+    <input class="inp" id="inp-senha" type="password" placeholder="Digite sua senha" autocomplete="current-password">
+    <button class="pass-eye" onclick="toggleSenha()" tabindex="-1" id="eye-btn">👁</button>
+  </div>
+  <div class="hint">Senha padrão: <strong style="color:var(--muted)">padrao123456</strong></div>
+
+  <button class="btn-login" id="btn-login" onclick="entrar()">ENTRAR NO CAMPO ⚽</button>
+  <div class="l-load" id="l-load"><span></span><span></span><span></span></div>
+  <div class="l-err" id="l-err"></div>
+  <p class="l-note">Problemas para entrar? Fale com o organizador.<br><strong>Só jogadores cadastrados podem entrar.</strong></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://xpvomactkrmtaxqyrhou.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_nGzAilrHRnZ9HgGVltXZWA_PTHzqt6L';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+function showErr(msg){ const e=document.getElementById('l-err'); e.textContent=msg; e.style.display='block'; }
+
+function toggleSenha(){
+  const inp=document.getElementById('inp-senha');
+  inp.type=inp.type==='password'?'text':'password';
+}
+
+document.getElementById('inp-nome').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('inp-senha').focus(); });
+document.getElementById('inp-senha').addEventListener('keydown',e=>{ if(e.key==='Enter') entrar(); });
+
+async function entrar(){
+  const nome  = document.getElementById('inp-nome').value.trim();
+  const senha = document.getElementById('inp-senha').value;
+  document.getElementById('l-err').style.display='none';
+
+  if(!nome)  { showErr('Preencha seu nome.'); return; }
+  if(!senha) { showErr('Preencha sua senha.'); return; }
+
+  const btn=document.getElementById('btn-login');
+  btn.disabled=true;
+  document.getElementById('l-load').style.display='block';
+
+  try {
+    const { data, error } = await sb
+      .from('jogadores')
+      .select('*')
+      .eq('senha', senha);
+
+    document.getElementById('l-load').style.display='none';
+    btn.disabled=false;
+
+    if(error || !data || data.length === 0){
+      showErr('Senha incorreta. Verifique ou fale com o organizador.');
+      return;
+    }
+
+    // Encontra pelo nome (ignora maiúsculas e acentos)
+    const jogador = data.find(j => norm(j.name) === norm(nome));
+
+    if(!jogador){
+      showErr('Nome não encontrado com essa senha. Verifique a escrita.');
+      return;
+    }
+
+    localStorage.setItem('pd_user', JSON.stringify(jogador));
+    window.location.href = 'index.html';
+
+  } catch(err){
+    document.getElementById('l-load').style.display='none';
+    btn.disabled=false;
+    showErr('Erro de conexão. Tente novamente.');
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
