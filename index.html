@@ -357,6 +357,16 @@ input:checked+.tog-sl::before{background:white;transform:translateX(20px)}
       <div style="font-size:.63rem;color:var(--faint);line-height:1.55" id="confirm-hint"></div>
     </div>
   </div>
+  <!-- ALTERAR SENHA -->
+  <div class="card" style="padding:1rem;margin-bottom:.65rem">
+    <div style="font-size:.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">🔒 Alterar Senha</div>
+    <input class="fi" id="senha-atual" type="password" placeholder="Senha atual" style="margin-bottom:.4rem">
+    <input class="fi" id="senha-nova" type="password" placeholder="Nova senha" style="margin-bottom:.4rem">
+    <input class="fi" id="senha-conf" type="password" placeholder="Confirmar nova senha">
+    <button class="btn-confirm available" onclick="alterarSenha()" style="margin-top:.7rem;padding:.6rem;font-size:.82rem;letter-spacing:1px">SALVAR NOVA SENHA</button>
+    <div id="senha-msg" class="alrt" style="display:none"></div>
+  </div>
+
   <div class="hist-box">
     <div class="hist-h"><span>📅</span><span class="hist-ht">Histórico de Peladas</span></div>
     <div id="p-hist"><div style="padding:1.5rem;text-align:center;font-size:.78rem;color:var(--faint)">Carregando histórico...</div></div>
@@ -1234,6 +1244,35 @@ async function adjStat(id,key,delta){
   if(USER.id===id){USER[key]=novo;localStorage.setItem('pd_user',JSON.stringify(USER));}
   renderRank();
   alrt('al-stats','al-ok','✅ '+key+' de '+p.name+' → '+novo);
+}
+
+async function alterarSenha(){
+  const atual = document.getElementById('senha-atual').value;
+  const nova  = document.getElementById('senha-nova').value;
+  const conf  = document.getElementById('senha-conf').value;
+  const msg   = document.getElementById('senha-msg');
+
+  const show = (cls, txt) => {
+    msg.className = 'alrt ' + cls;
+    msg.textContent = txt;
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3500);
+  };
+
+  if(!atual || !nova || !conf) return show('al-er', 'Preencha todos os campos.');
+  if(atual !== USER.senha) return show('al-er', 'Senha atual incorreta.');
+  if(nova.length < 6) return show('al-er', 'A nova senha precisa ter pelo menos 6 caracteres.');
+  if(nova !== conf) return show('al-er', 'As senhas não coincidem.');
+
+  const { error } = await sb.from('jogadores').update({ senha: nova }).eq('id', USER.id);
+  if(error) return show('al-er', 'Erro ao salvar. Tente novamente.');
+
+  USER.senha = nova;
+  localStorage.setItem('pd_user', JSON.stringify(USER));
+  document.getElementById('senha-atual').value = '';
+  document.getElementById('senha-nova').value = '';
+  document.getElementById('senha-conf').value = '';
+  show('al-ok', '✅ Senha alterada com sucesso!');
 }
 
 function renderHomeConfirm(){
